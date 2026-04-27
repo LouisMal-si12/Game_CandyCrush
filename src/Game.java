@@ -1,7 +1,8 @@
 import java.awt.*; // hàm này tạo ra một GUI tạo ra các giao diện cửa sổ bla bla..
 import java.awt.event.*;
 import java.io.File; // hàm này tạo ra một GUI tạo ra các giao diện cửa sổ bla bla..
-import java.io.IOException;
+import java.io.IOException; // hàm này để xử lý các lỗi có thể xảy ra khi đọc hình ảnh từ các tệp, ví dụ:
+//  nếu tệp không tồn tại hoặc không thể đọc được thì sẽ throw một ngoại lệ IOException
 import java.util.ArrayList;
 import java.util.Random;
 import javax.imageio.ImageIO;
