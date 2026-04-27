@@ -1,6 +1,6 @@
 import java.awt.Image;
-import javax.swing.ImageIcon;
 import java.io.File;
+import javax.swing.ImageIcon;
 
 // Lớp trừu tượng làm bản vẽ gốc cho mọi loại kẹo
 public abstract class Candy {
