@@ -9,7 +9,7 @@ public abstract class Candy {
     protected Candy color;
     protected Image image;
 
-    // Các biến phục vụ cho Animation 
+    // Các biến phục vụ cho Animation
     protected int x, y;               // Tọa độ vẽ pixel thực tế hiện tại
     protected int targetX, targetY;   // Tọa độ pixel đích đến muốn bay tới
     protected boolean isMoving;       // Trạng thái: đang bay hay đang đứng im
@@ -28,7 +28,7 @@ public abstract class Candy {
         this.targetY = y;
         this.isMoving = false;
         
-        loadImage(); 
+        loadImage();
     }
 
     // Hàm load ảnh kẹo
@@ -69,31 +69,31 @@ public abstract class Candy {
         }
     }
 
-    //  Getters 
+    //  Getters
     public int getRow() {
-         return row; 
+        return row;
         }
     public int getCol() {
-         return col; 
+        return col;
         }
-    public int getX() { 
+    public int getX() {
         return x;
-     }
-    public int getY() { 
-        return y; 
+    }
+    public int getY() {
+        return y;
     }
     public boolean isMoving() {
-         return isMoving; 
+        return isMoving;
         }
-    public Candy getColor() { 
-        return color; 
+    public Candy getColor() {
+        return color;
 
     }
-    public Image getImage() { 
-        return image; 
+    public Image getImage() {
+        return image;
     }
 
-    // Setters 
+    // Setters
     
     // Cập nhật vị trí logic và tự động set tọa độ đích để kẹo bắt đầu trượt
     public void setPosition(int row, int col) {
