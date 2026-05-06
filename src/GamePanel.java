@@ -76,10 +76,18 @@ public class BoardPanel extends JPanel {
     }
 
     // --- SETTERS & UPDATERS (Hàm thiết lập & Cập nhật) ---
-    public void setController(GameController controller) { this.controller = controller; }
-    public void renderBoard(Board board) { this.board = board; repaint(); }
-    public void highlightTile(Position pos) { this.highlightedPos = pos; repaint(); }
-    public void clearHighlight() { this.highlightedPos = null; repaint(); }
+    public void setController(GameController controller) { 
+        this.controller = controller; 
+    }
+    public void renderBoard(Board board) { 
+        this.board = board; repaint(); 
+    }
+    public void highlightTile(Position pos) { 
+        this.highlightedPos = pos; repaint(); 
+    }
+    public void clearHighlight() {
+        this.highlightedPos = null; repaint(); 
+    }
 
     /**
      * Triggers the internal calculation for moving candies.
