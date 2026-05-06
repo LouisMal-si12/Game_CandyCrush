@@ -33,7 +33,7 @@ private list<list<position>> findHorizontalMatches(Board board) {
 private List<List<Position>> findVerticalMatches(Board board) {
     List<List<Position>> matches = new ArrayList<>();
     int size = board.getSize();
- 
+
     for (int y = 0; y < size - 2; y++) {
         for (int x = 0; x < size; x++) {
             int type = board.getCandy(x, y);
