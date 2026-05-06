@@ -3,7 +3,6 @@
 /**
  * Class GameController - The "Controller" in the MVC pattern.
  * Coordinates between the Model (GameEngine) and the View (GameWindow/BoardPanel).
- * (Nhạc trưởng của trò chơi - Điều phối giữa Bộ não xử lý luật và Sân khấu hiển thị.)
  */
 public class GameController {
     // --- DEPENDENCIES (Thành phần liên kết) ---
@@ -19,7 +18,7 @@ public class GameController {
     // (Cờ khóa thao tác chuột khi trò chơi đã kết thúc)
     private boolean isGameEnded = false; 
 
-    // --- CONSTRUCTOR (Hàm khởi tạo) ---
+    //  CONSTRUCTOR 
     public GameController(GameEngine engine, GameView view) {
         this.engine = engine;
         this.view = view;
