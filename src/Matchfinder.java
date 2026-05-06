@@ -1,14 +1,14 @@
 import java.util.*;
 
-public class Matchfinder {
+MatchFinders Matchfinder {
     public List<List<Position>> findMatches(Board board) { 
         List<List<Position>> allMatches = new Arraylist<>();
         allmatches.addAll(findHorizontalMatches(board));
-        allmatcges.addAll(findVerticalMatches(board));
+        allmatches.addAll(findVerticalMatches(board));
         return allMatches;
     }
 
-}
+
 
 private list<list<position>> findHorizontalMatches(Board board) {
     list<list<position>> matches = new Arraylist<>();
@@ -50,7 +50,7 @@ private List<List<Position>> findVerticalMatches(Board board) {
     return matches;
 }
 
-public List<position> FindDuplicateMatches( Board board){
+public List<position> getFlatMatches( Board board){
     Set<String> seen = new HashSet<>();
         List<Position> flat = new ArrayList<>();
         for (List<Position> group : findMatches(board)) {
@@ -63,3 +63,8 @@ public List<position> FindDuplicateMatches( Board board){
         }
         return flat;
     }
+    public boolean hasMatches(Board board) {
+        return !findMatches(board).isEmpty();
+    }
+}
+ 
