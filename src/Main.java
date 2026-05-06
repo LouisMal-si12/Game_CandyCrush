@@ -8,7 +8,7 @@ import javax.swing.SwingUtilities;
 public class Main {
     public static void main(String[] args) {
         // Run on Event Dispatch Thread for smooth UI
-        // (Chạy trên luồng sự kiện của Swing để đồ họa mượt mà)
+        // (Chạy trên luồng sự kiện của Swing để đồ họa mượt)
         SwingUtilities.invokeLater(() -> {
             GameEngine engine = new GameEngine();
             GameWindow window = new GameWindow();
