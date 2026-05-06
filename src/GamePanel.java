@@ -1,152 +1,157 @@
-import javax.swing.JPanel; //frame
-import javax.swing.ImageIcon;//download image
-import javax.swing.Timer;//set time
-import java.awt.*;//layout manager
-import java.awt.event.MouseAdapter;//chỉ xử lý hành động kick chuột
-import java.awt.event.MouseEvent;//trích xuất đc tọa độ x,y
-import java.io.File;//dẫn đến các file đc lưu trong mt
-import java.util.List; 
+// File: BoardPanel.java
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
-public class GamePanel extends JPanel{ //kế thừa JPanel để làm khung vẽ đồ họa
-    private Board board;//quản lý mảng kẹo
-    private MatchFinder finder=new MatchFinder();// thuật toán quét nổ kẹo
-    private GameManager gm=new GameManager(20,700); //quản lý điểm, times:20; score:700
+/**
+ * Class BoardPanel - The main visual component of the game board.
+ * Handles rendering candies, animations, and capturing mouse input.
+ * (Sân khấu chính - Phụ trách vẽ kẹo, chạy hoạt ảnh và bắt sự kiện chuột.)
+ */
+public class BoardPanel extends JPanel {
+    // --- DEPENDENCIES & STATE (Thành phần liên kết & Trạng thái) ---
+    private GameController controller;
+    private Board board;
+    private Position highlightedPos; // Candy with glowing border (Viên kẹo đang được viền sáng)
+    private Timer gameLoop;          // 60 FPS Engine (Đồng hồ đếm nhịp 60 khung hình/giây)
+    
+    // Flag to detect when candies stop moving to trigger cascades
+    // (Cờ theo dõi khoảnh khắc kẹo vừa dừng rơi để kích hoạt nổ dây chuyền)
+    private boolean wasAnimating = false; 
 
-    //xử lý hằng số chết
-    private final int CELL_SIZE= 75;//kich thuoc o vuong 
-    private final int BOARD_OFFSET_X=14;//lề trái
-    private final int BOARD_OFFSET_Y=165;//lề trên
-    private final int WINDOW_WIDTH=612;// chiều rộng cửa sổ
-    private final int WINDOW_HEIGHT=800;// chiều cao cửa sổ
+    // Constant size for grid calculations (Kích thước chuẩn cho 1 ô kẹo)
+    private final int CELL_SIZE = 75; 
 
-    private int firstRow=-1;//tọa độ ban đầu của ng chơi khi kick vào
-    private int firstCol=-1;
-    private Image bgImage;//khung rỗng
-    private Timer gameLoop;//đồng hồ khai báo đếm nhịp_animation
+    // --- CONSTRUCTOR (Hàm khởi tạo) ---
+    public BoardPanel() {
+        this.setOpaque(false); // Transparent background (Nền trong suốt)
+        
+        // --- ANIMATION LOOP (Vòng lặp hoạt ảnh) ---
+        gameLoop = new Timer(16, e -> {
+            if (board != null) {
+                updateAnimations(); // Move candies slightly (Di chuyển kẹo từng chút một)
+                repaint();          // Redraw screen (Vẽ lại màn hình)
 
-    public GamePanel(Board board){
-        this.board=board;//khi file main tạo ra gamepanel->giúp gamepanel phân biệt các items candy
-        this.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));// set cái kích thước của khung game
-
-        //load ảnh nền
-        try{
-            File file=new File("resource/bg.png");
-            if(!file.exists()) file =new File ("../resource/bg.png");
-            if(file.exists()) bgImage= new ImageIcon (file.getAbsolutePath()).getImage();
-        } catch(Exception e){}
-        //try-catch giúp khi ko tìm thấy ảnh nền nó tự động set về default
-
-        gameLoop= new Timer (16,e ->{//tần số quét giúp duy trì hoạt ảnh
-            updateGameLogic();//ksoat tọa độ của các viên kẹo
-            repaint();//update tọa độ đã được cập nhật của updateGameLogic
+                // CASCADE DETECTION LOGIC (Logic bắt nhịp nổ dây chuyền)
+                boolean currentlyAnimating = isAnimating();
+                if (wasAnimating && !currentlyAnimating) {
+                    // Candies just stopped moving -> Request a match check
+                    // (Kẹo vừa đứng im -> Yêu cầu Controller quét bàn cờ tìm chuỗi 3)
+                    if (controller != null) {
+                        controller.checkCascades();
+                    }
+                }
+                wasAnimating = currentlyAnimating; 
+            }
         });
         gameLoop.start();
 
-        //xử lý đk kick chuột(lab5)
-        this.addMouseListener(new MouseAdapter(){
+        // --- MOUSE LISTENER (Lắng nghe sự kiện chuột) ---
+        this.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e){
-                if (gm.isGameOver() || gm.isGameWon() || isBoardMoving()) return;//ktra trạng thái game
-            
-                int col= (e.getX()-BOARD_OFFSET_X)/CELL_SIZE;//xác định tọa độ chuột đang kick...
-                int row= (e.getY()-BOARD_OFFSET_Y)/CELL_SIZE;
+            public void mousePressed(MouseEvent e) {
+                // Lock input if candies are still moving
+                // (Khóa chuột không cho bấm khi kẹo trên sân đang bay lơ lửng)
+                if (controller == null || isAnimating()) return; 
 
-                if (row<0||row>=8||col<0||col>=8) return;
-                if (firstRow==-1){
-                    firstRow=row; firstCol=col;//ghi nhớ vị trí kick chuột ban đầu
-                }else{
-                    //ghi nhớ vị trí kick chuột lần 2
-                    if(Math.abs(firstRow-row)+Math.abs(firstCol-col)==1){//Math.abs(cột-cột) đảm bảo hai viên kẹo sát vách nhau
-                        gm.decreaseMove();//3 viên gần nhau thì nổ và tính điểm + nếu ko đổi thì trả lại ngược vị trí cũ
-                        board.swap(firstRow,firstCol,row, col);
-                        if(!finder.findMatches(board.getGrid()).isEmpty()){
-                            processMatches();
-                        }else{
-                            board.swap(row,col,firstRow,firstCol);
-                        }
-                    }
-                    firstRow=-1; firstCol=-1;//kết thúc lượt, mt xóa sạch tạo độ và trả lại random mới để bắt đầu cho lượt đổi chỗ kẹo tiếp theo
-                        }
-                    }
-                });
+                // Coordinate translation: Pixel -> Grid Index
+                // (Ánh xạ tọa độ: Điểm ảnh trên màn hình -> Vị trí mảng hàng/cột)
+                int col = e.getX() / CELL_SIZE;
+                int row = e.getY() / CELL_SIZE;
+                Position clickedPos = new Position(row, col);
+                
+                // Toggle highlight based on user interaction
+                // (Tự động bật/tắt viền sáng dựa trên thao tác người dùng)
+                if (highlightedPos == null) {
+                    highlightTile(clickedPos); 
+                } else if (highlightedPos.equals(clickedPos)) {
+                    clearHighlight(); 
+                } else {
+                    clearHighlight(); 
+                }
+                
+                controller.handleTileClick(clickedPos);
+            }
+        });
     }
-    
-    //tọa độ của kẹo
-    private void updateGameLogic(){//hoạt ảnh+nổ liên hoàn
-        boolean moving =false;
-        Candy[][] grid= board.getGrid();
-        for (int i=0;i<8;i++){//quét lướt qa cái grid để luon trong trạng thái check kẹo
-            for (int j=0; j<8; j++){
-                if(grid[i][j]!=null){
-                    grid[i][j].update();
-                    if (grid[i][j].isMoving())moving=true;
+
+    // --- SETTERS & UPDATERS (Hàm thiết lập & Cập nhật) ---
+    public void setController(GameController controller) { this.controller = controller; }
+    public void renderBoard(Board board) { this.board = board; repaint(); }
+    public void highlightTile(Position pos) { this.highlightedPos = pos; repaint(); }
+    public void clearHighlight() { this.highlightedPos = null; repaint(); }
+
+    /**
+     * Triggers the internal calculation for moving candies.
+     * (Kích hoạt bộ tính toán tọa độ di chuyển cho tất cả viên kẹo.)
+     */
+    private void updateAnimations() {
+        if (board == null) return;
+        int rows = board.getRows(), cols = board.getCols();
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                Candy candy = board.getCandy(new Position(r, c));
+                if (candy != null) {
+                    candy.update();
+                }
             }
         }
-        if (!moving){//giúp cho 3 viên mà gần nhau random thì tự nổ và tính điểm...
-            List<Candy> newMatches=finder.findMatches(board.getGrid());//dùng list thay vì aray giúp hệ thống linh hoạt chứa lượng kẹo nổ bất kì mà ko bị giới hạn kích thước cứng
-            if (!newMatches.isEmpty()) processMatches();
-        }
-    }    
-    //ngăn ng chơi lướt kẹo khi bảng kẹo chưa ổn định
-    private boolean isBoardMoving(){
-        for (Candy[] row: board.getGrid()){
-            for (Candy c:row){
-                if(c!=null && c.isMoving()) return true;
+    }
+
+    /**
+     * Checks if any candy on the board is currently in motion.
+     * (Kiểm tra xem có bất kỳ viên kẹo nào đang trượt/rớt hay không.)
+     */
+    private boolean isAnimating() {
+        if (board == null) return false;
+        int rows = board.getRows(), cols = board.getCols();
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                Candy candy = board.getCandy(new Position(r, c));
+                if (candy != null && candy.isMoving()) return true;
             }
         }
-    }
         return false;
     }
-    //
-    private void processMatches(){
-        List<Candy> matches= finder.findMatches(board.getGrid());
-        if(!matches.isEmpty()){
-            gm.addScore(matches.size());//xem điểm trng ds có bao nhiêu viên thì cộng bấy nhiêu điểm
-            for (Candy c:matches) board.getGrid()[c.getRow()][c.getCol()]=null;// lấy tọa độ của từng viên đem đi nổ và xóa mất nó đi
-            board.refillBoard();//random thêm kẹo mới, lấp đầy chỗ đã bị nổ
+    
+    // --- RENDERING METHOD (Hàm vẽ đồ họa chính) ---
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (board == null) return;
+
+        Graphics2D g2d = (Graphics2D) g;
+        // Enable anti-aliasing for smooth graphics (Bật khử răng cưa cho nét vẽ mượt)
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // 1. DRAW HIGHLIGHT GLOW (Vẽ hiệu ứng viền sáng nổi bật)
+        if (highlightedPos != null) {
+            int x = highlightedPos.getCol() * CELL_SIZE;
+            int y = highlightedPos.getRow() * CELL_SIZE;
+            
+            // Soft white background (Lớp nền sáng trắng mờ)
+            g2d.setColor(new Color(255, 255, 255, 100));
+            g2d.fillRoundRect(x, y, CELL_SIZE, CELL_SIZE, 20, 20);
+            
+            // Bright thick border (Khung viền sáng nét dày)
+            g2d.setColor(Color.WHITE);
+            g2d.setStroke(new BasicStroke(4)); 
+            g2d.drawRoundRect(x + 4, y + 4, CELL_SIZE - 8, CELL_SIZE - 8, 20, 20);
+            
+            g2d.setStroke(new BasicStroke(1)); // Reset stroke (Trả lại nét mảnh mặc định)
         }
-    }
-    @Override//lab5 Graphic &JPanel
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g);//xóa kẹo cũ để chuẩn bị cho kẹo mới rớt xuống thay chỗ
-        Graphics2D g2d=(Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);//xử lý hình ảnh tải về từ resources
 
-        if (bgImage !=null) g2d.drawImage(bgImage,0,0,WINDOW_WIDTH,WINDOW_HEIGHT,null);//gắn bg
-
-        g2d.setColor(Color.WHITE);//chọn màu cọ
-        g2d.setFont(new Font("Comic Sans MS", Font.BOLD,22));//set font chữ và cỡ chữ
-        g2d.drawString(gm.getScore()+"/"+gm.getTargetScore(),140,90);//vẽ bảng score
-        g2d.drawString(String.valueOf(gm.getMovesLeft()),530,90);//vẽ số lượt đi
-
-        g2d.translate(BOARD_OFFSET_X,BOARD_OFFSET_Y);//Bình thường, gốc tọa độ (0,0) của bản vẽ nằm ở góc trên cùng bên trái của cửa sổ nó giúp dời gốc tọa độ vào đúng góc ...
-        Candy[][] grid=board.getGrid();
-        for (int i=0;i<8;i++){
-            //vẽ viền và vẽ kẹo
-            for (int j=0;j<8; j++){
-
-                if(i==firstRow && j==firstCol){
-                    g2d.setColor(Color.WHITE);
-                    g2d.drawRect(j*CELL_SIZE+2, i*CELL_SIZE+2, CELL_SIZE-4,CELL_SIZE-4);//kẹo đang đc chọn sẽ sẫm màu
-                    
-                }
-
-                if (grid [i][j]!=null){
-                    Candy candy=grid[i][j];
-                    g2d.drawImage(candy.getImage(),candy.getX()+5, candy.getY()+5,CELL_SIZE-10, null);
-                    //getImage thể hiện tính đa hình,giúp gom kẹo
+        // 2. DRAW CANDIES (Vẽ các viên kẹo)
+        int rows = board.getRows(), cols = board.getCols();
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                Candy candy = board.getCandy(new Position(r, c));
+                if (candy != null && candy.getImage() != null) {
+                    // Draw using real-time pixel coordinates X and Y
+                    // (Vẽ kẹo theo tọa độ Pixel ảo X và Y đang chạy liên tục)
+                    g2d.drawImage(candy.getImage(), candy.getX() + 5, candy.getY() + 5, CELL_SIZE - 10, CELL_SIZE - 10, null);
                 }
             }
-        }
-        g2d.translate(-BOARD_OFFSET_X,-BOARD_OFFSET_Y);
-
-        if (gm.isGameWon()||gm.isGameOver()){
-            g2d.setColor(new Color(0,0,0,150));// tạo màu đen với độ trong suốt 150
-            g2d.fillRect(-BOARD_OFFSET_X,-BOARD_OFFSET_Y,WINDOW_WIDTH,WINDOW_HEIGHT);
-            g2d.setColor(Color.WHITE);
-            g2d.drawString(gm.isGameWon()?"Victory!":"GameOver",200,300);
         }
     }
 }
-
-

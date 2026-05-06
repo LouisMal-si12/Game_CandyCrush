@@ -1,17 +1,23 @@
-import javax.swing.JFrame;
+// File: Main.java
+import javax.swing.SwingUtilities;
+
+/**
+ * Class Main - Application Entry Point.
+ * (Điểm khởi động - Nơi lắp ráp MVC và chạy game.)
+ */
 public class Main {
-    public static void main(String[] args){
-        JFrame frame=new JFrame ("Candy Crush");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);//cố định kích thước frame
-
-        Board board = new Board(8,8);//đối tượng qly data, logic cua bang chinh
-        GamePanel panel= new GamePanel(board);
-        frame.add (panel);
-
-        frame.pack();
-        frame.setLocationRelativeTo(null);//hiện khung ra chính giữa
-        frame.setVisible(true);//hiển thị cửa sổ
+    public static void main(String[] args) {
+        // Run on Event Dispatch Thread for smooth UI
+        // (Chạy trên luồng sự kiện của Swing để đồ họa mượt mà)
+        SwingUtilities.invokeLater(() -> {
+            GameEngine engine = new GameEngine();
+            GameWindow window = new GameWindow();
+            GameController controller = new GameController(engine, window);
+            
+            window.setController(controller);
+            window.setVisible(true);
+            
+            controller.startGame(); // Let's play! (Bắt đầu chơi!)
+        });
     }
-    
 }
