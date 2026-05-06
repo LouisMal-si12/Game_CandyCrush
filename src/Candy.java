@@ -82,13 +82,27 @@ public abstract class Candy {
     }
 
     // Getters (Các hàm lấy giá trị)
-    public int getRow() { return row; }
-    public int getCol() { return col; }
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public boolean isMoving() { return isMoving; }
-    public CandyColor getColor() { return color; }
-    public Image getImage() { return image; }
+    public int getRow() { 
+        return row; 
+    }
+    public int getCol() {
+        return col; 
+    }
+    public int getX() {
+        return x;
+    }
+    public int getY() { 
+        return y; 
+    }
+    public boolean isMoving() { 
+        return isMoving;
+    }
+    public CandyColor getColor() {
+        return color;
+    }
+    public Image getImage() {
+        return image;
+    }
 
     /**
      * Updates logic position and sets the new target pixel for sliding.
