@@ -1,27 +1,32 @@
+// File: Candy.java
 import java.awt.Image;
 import java.io.File;
 import javax.swing.ImageIcon;
 
-// Lớp trừu tượng làm bản vẽ gốc cho mọi loại kẹo
+/**
+ * Abstract Class Candy - The blueprint for all candy types.
+ * Handles logical coordinates, pixel coordinates, and smooth sliding animations.
+ * (Bản vẽ gốc của mọi loại kẹo - Xử lý tọa độ hàng/cột, tọa độ pixel vẽ và hoạt ảnh trượt.)
+ */
 public abstract class Candy {
+    // Logic position (Vị trí logic)
     protected int row;
     protected int col;
-    protected Candy color;
+    protected CandyColor color;
     protected Image image;
 
-    // Các biến phục vụ cho Animation
-    protected int x, y;               // Tọa độ vẽ pixel thực tế hiện tại
-    protected int targetX, targetY;   // Tọa độ pixel đích đến muốn bay tới
-    protected boolean isMoving;       // Trạng thái: đang bay hay đang đứng im
-    protected final int CELL_SIZE = 75; // Khớp với kích thước ô bên GamePanel
+    // Animation variables (Các biến phục vụ hoạt ảnh)
+    protected int x, y;               // Current pixel coordinates (Tọa độ điểm ảnh thực tế)
+    protected int targetX, targetY;   // Destination pixel coordinates (Tọa độ đích đến)
+    protected boolean isMoving;       // Motion state (Trạng thái đang di chuyển)
+    protected final int CELL_SIZE = 75; 
 
-    //  Hàm khởi tạo
-    public Candy(Candy color, int row, int col) {
+    public Candy(CandyColor color, int row, int col) {
         this.color = color;
         this.row = row;
         this.col = col;
         
-        // Ban đầu khởi tạo vị trí pixel và đích đến trùng nhau (đứng im)
+        // Start statically at the destination (Ban đầu sinh ra đứng im tại chỗ)
         this.x = col * CELL_SIZE;
         this.y = row * CELL_SIZE;
         this.targetX = x;
@@ -31,71 +36,64 @@ public abstract class Candy {
         loadImage();
     }
 
-    // Hàm load ảnh kẹo
+    /**
+     * Loads the specific candy image based on its color.
+     * (Tải ảnh kẹo tương ứng dựa vào tên màu.)
+     */
     protected void loadImage() {
         try {
-            String fileName = color.toString() + ".png"; 
-            File file = new File("resource/" + fileName); // Trỏ đúng vào thư mục resource
+            // Adjust toLowerCase() if your files are lowercase (e.g., "red.png")
+            // (Chuyển thành chữ thường nếu file ảnh của bạn viết thường)
+            String fileName = color.name().toLowerCase() + ".png"; 
+            File file = new File("resource/" + fileName);
             if (!file.exists()) file = new File("../resource/" + fileName);
             
             if (file.exists()) {
                 this.image = new ImageIcon(file.getAbsolutePath()).getImage();
             } else {
-                System.out.println("CẢNH BÁO: Không tìm thấy ảnh " + fileName + "!");
+                System.out.println("WARNING: Image not found: " + fileName);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    // Tính Trừu tượng_ Buộc các loại kẹo con (Kẹo Đỏ, Kẹo Xanh, Kẹo Sọc...) tự định nghĩa cách nổ
+    public abstract String getTypeName(); 
     public abstract void crush();
 
-    // HÀM QUAN TRỌNG Động cơ Animation trượt mượt mà
+    /**
+     * Animation Engine: Gradually moves the candy towards its target coordinate.
+     * (Động cơ Hoạt ảnh: Di chuyển kẹo dần dần về tọa độ đích với vận tốc giảm dần.)
+     */
     public void update() {
         if (x != targetX || y != targetY) {
             isMoving = true;
-            
-            // Tính toán tốc độ trượt Khoảng cách càng xa trượt càng nhanh
+            // Calculate velocity (Tính toán tốc độ trượt - Khoảng cách chia 4)
             int speedX = (targetX - x) / 4; 
             int speedY = (targetY - y) / 4;
 
-            // Nếu khoảng cách còn quá nhỏ (< 4px), ép nó về đích luôn cho khỏi giật
-            if (Math.abs(targetX - x) < 4) x = targetX;
-            else x += speedX;
-
-            if (Math.abs(targetY - y) < 4) y = targetY;
-            else y += speedY;
+            // Snap to grid if very close to prevent jitter
+            // (Ép dính vào lưới nếu khoảng cách quá nhỏ để tránh giật hình)
+            if (Math.abs(targetX - x) < 4) x = targetX; else x += speedX;
+            if (Math.abs(targetY - y) < 4) y = targetY; else y += speedY;
         } else {
-            isMoving = false; // Đã tới đích, dừng lại
+            isMoving = false;
         }
     }
 
-    //  Getters
-    public int getRow() {
-        return row;
-        }
-    public int getCol() {
-        return col;
-        }
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
-    }
-    public boolean isMoving() {
-        return isMoving;
-        }
-    public Candy getColor() {
-        return color;
+    // Getters (Các hàm lấy giá trị)
+    public int getRow() { return row; }
+    public int getCol() { return col; }
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public boolean isMoving() { return isMoving; }
+    public CandyColor getColor() { return color; }
+    public Image getImage() { return image; }
 
-    }
-    public Image getImage() {
-        return image;
-    }
-
-    // Setters
-    
-    // Cập nhật vị trí logic và tự động set tọa độ đích để kẹo bắt đầu trượt
+    /**
+     * Updates logic position and sets the new target pixel for sliding.
+     * (Cập nhật vị trí logic và châm ngòi tọa độ đích để kẹo trượt tới.)
+     */
     public void setPosition(int row, int col) {
         this.row = row;
         this.col = col;
@@ -103,13 +101,16 @@ public abstract class Candy {
         this.targetY = row * CELL_SIZE;
     }
 
-    // Dùng khi sinh kẹo mới_đặt kẹo tàng hình ở trên cao rồi rớt xuống
+    /**
+     * Spawns the candy high above the board to create a falling effect.
+     * (Sinh kẹo ở trên trần nhà để tạo hiệu ứng rơi tự do.)
+     */
     public void dropFromTop(int row, int col) {
         this.row = row;
         this.col = col;
         this.targetX = col * CELL_SIZE;
         this.targetY = row * CELL_SIZE;
         this.x = targetX;
-        this.y = targetY - 400; // Xuất phát từ vị trí lùi lên 400px so với đích để tạo hiệu ứng rớt
+        this.y = targetY - 400; // Start 400px above (Bắt đầu từ tọa độ Y lùi lên 400px)
     }
 }
