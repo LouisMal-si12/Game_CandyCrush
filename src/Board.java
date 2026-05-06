@@ -24,8 +24,12 @@ public class Board {
     }
 
     // --- BASIC UTILITIES (Các hàm tiện ích cơ bản) ---
-    public int getRows() { return rows; }
-    public int getCols() { return cols; }
+    public int getRows() { 
+        return rows;
+    }
+    public int getCols() { 
+        return cols; 
+    }
 
     /**
      * Checks if a coordinate is within the board boundaries.
