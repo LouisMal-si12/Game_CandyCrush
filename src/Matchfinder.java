@@ -1,28 +1,39 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-MatchFinders Matchfinder {
+
+public class MatchFinder {
+    
     public List<List<Position>> findMatches(Board board) { 
-        List<List<Position>> allMatches = new Arraylist<>();
-        allmatches.addAll(findHorizontalMatches(board));
-        allmatches.addAll(findVerticalMatches(board));
+        List<List<Position>> allMatches = new ArrayList<>();
+        allMatches.addAll(findHorizontalMatches(board));
+        allMatches.addAll(findVerticalMatches(board));
         return allMatches;
     }
 
+    private List<List<Position>> findHorizontalMatches(Board board) {
+        List<List<Position>> matches = new ArrayList<>();
+        int rows = board.getRows(), cols = board.getCols();
 
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols - 2; c++) {
+                Candy candy1 = board.getCandy(new Position(r, c));
+                if (candy1 == null) continue;
 
-private list<list<position>> findHorizontalMatches(Board board) {
-    list<list<position>> matches = new Arraylist<>();
-    int size = board.getSize();
+                Candy candy2 = board.getCandy(new Position(r, c + 1));
+                Candy candy3 = board.getCandy(new Position(r, c + 2));
 
-    for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size - 2; x++) {
-                int type = board.getCandy(x, y);
-                if (type == 0) continue;
-                if (board.getCandy(x + 1, y) == type && board.getCandy(x + 2, y) == type) {
+              
+                if (candy2 != null && candy3 != null &&
+                    candy1.getColor() == candy2.getColor() && 
+                    candy1.getColor() == candy3.getColor()) {
+                    
                     List<Position> match = new ArrayList<>();
-                    match.add(new Position(x, y));
-                    match.add(new Position(x + 1, y));
-                    match.add(new Position(x + 2, y));
+                    match.add(new Position(r, c));
+                    match.add(new Position(r, c + 1));
+                    match.add(new Position(r, c + 2));
                     matches.add(match);
                 }
             }
@@ -30,41 +41,45 @@ private list<list<position>> findHorizontalMatches(Board board) {
         return matches;
     }
 
-private List<List<Position>> findVerticalMatches(Board board) {
-    List<List<Position>> matches = new ArrayList<>();
-    int size = board.getSize();
+    private List<List<Position>> findVerticalMatches(Board board) {
+        List<List<Position>> matches = new ArrayList<>();
+        int rows = board.getRows(), cols = board.getCols();
+ 
+        for (int r = 0; r < rows - 2; r++) {
+            for (int c = 0; c < cols; c++) {
+                Candy candy1 = board.getCandy(new Position(r, c));
+                if (candy1 == null) continue;
 
-    for (int y = 0; y < size - 2; y++) {
-        for (int x = 0; x < size; x++) {
-            int type = board.getCandy(x, y);
-            if (type == 0) continue;
-            if (board.getCandy(x, y + 1) == type && board.getCandy(x, y + 2) == type) {
-                List<Position> match = new ArrayList<>();
-                match.add(new Position(x, y));
-                match.add(new Position(x, y + 1));
-                match.add(new Position(x, y + 2));
-                matches.add(match);
+                Candy candy2 = board.getCandy(new Position(r + 1, c));
+                Candy candy3 = board.getCandy(new Position(r + 2, c));
+
+                if (candy2 != null && candy3 != null &&
+                    candy1.getColor() == candy2.getColor() && 
+                    candy1.getColor() == candy3.getColor()) {
+                    
+                    List<Position> match = new ArrayList<>();
+                    match.add(new Position(r, c));
+                    match.add(new Position(r + 1, c));
+                    match.add(new Position(r + 2, c));
+                    matches.add(match);
+                }
             }
         }
+        return matches;
     }
-    return matches;
-}
 
-public List<position> getFlatMatches( Board board){
-    Set<String> seen = new HashSet<>();
+ 
+    public List<Position> getFlatMatches(Board board){
+        Set<Position> seen = new HashSet<>();
         List<Position> flat = new ArrayList<>();
+        
         for (List<Position> group : findMatches(board)) {
             for (Position p : group) {
-                String key = p.x + "," + p.y;
-                if (seen.add(key)) {
+                if (seen.add(p)) { 
                     flat.add(p);
                 }
             }
         }
         return flat;
     }
-    public boolean hasMatches(Board board) {
-        return !findMatches(board).isEmpty();
-    }
 }
- 
