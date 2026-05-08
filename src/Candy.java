@@ -42,22 +42,21 @@ public abstract class Candy {
      */
     protected void loadImage() {
         try {
-            // Adjust toLowerCase() if your files are lowercase (e.g., "red.png")
-            // (Chuyển thành chữ thường nếu file ảnh của bạn viết thường)
-            String fileName = color.name().toLowerCase() + ".png"; 
-            File file = new File("resource/" + fileName);
-            if (!file.exists()) file = new File("../resource/" + fileName);
             
-            if (file.exists()) {
-                this.image = new ImageIcon(file.getAbsolutePath()).getImage();
+            String path = "/resources/" + color.name().toLowerCase() + ".png";
+            
+            java.net.URL imgURL = getClass().getResource(path);
+            
+            if (imgURL != null) {
+                this.image = new ImageIcon(imgURL).getImage();
             } else {
-                System.out.println("WARNING: Image not found: " + fileName);
+                System.out.println("WARNING: Image not found: " + path);
             }
         } catch (Exception e) {
+            System.err.println("Error loading image for color: " + color);
             e.printStackTrace();
         }
     }
-
     public abstract String getTypeName(); 
     public abstract void crush();
 
