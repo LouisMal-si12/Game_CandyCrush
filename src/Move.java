@@ -15,7 +15,7 @@ public class Move {
     }
 
     public boolean isAdjacent() {
-        int rowDiff = Math.abs(from.getRow() - to.getRow());
-        int colDiff = Math.abs(from.getCol() - to.getCol());
+        return (Math.abs(from.getRow() - to.getRow()) == 1 && from.getCol() == to.getCol()) ||
+               (Math.abs(from.getCol() - to.getCol()) == 1 && from.getRow() == to.getRow());
     }
 }
