@@ -27,7 +27,7 @@ public class GameWindow extends JFrame implements GameView {
         // Custom Main Panel to draw the background and overlay
         // (Panel tổng tùy chỉnh để vẽ ảnh nền và màn hình đen kết thúc)
         JPanel mainPanel = new JPanel() {
-            private Image bgImage = new ImageIcon("resources/bg.png").getImage();
+            private Image bgImage = new ImageIcon(getClass().getResource("/resources/bg.png")).getImage();
             
             @Override
             protected void paintComponent(Graphics g) {
