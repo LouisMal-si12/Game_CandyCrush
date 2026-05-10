@@ -2,7 +2,7 @@ public class Move {
     private Position from;
     private Position to;
 
-    public Move(Position from, Position tp) {
+    public Move(Position from, Position to) {
         this.from = from;
         this.to = to;
     }
@@ -15,8 +15,7 @@ public class Move {
     }
 
     public boolean isAdjacent() {
-        int rowDiff = Math.abs(from.getRow() - to.getRow());
-        int colDiff = Math.abs(from.getCol() - to.getCol());
-        return (rowDiff == 1 && colDiff ==0) || (rowDiff == 0 && colDiff ==1);
+        return (Math.abs(from.getRow() - to.getRow()) == 1 && from.getCol() == to.getCol()) ||
+               (Math.abs(from.getCol() - to.getCol()) == 1 && from.getRow() == to.getRow());
     }
 }

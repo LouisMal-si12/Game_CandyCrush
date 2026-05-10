@@ -5,7 +5,7 @@ import java.awt.*;//layout manager
 import java.awt.event.MouseAdapter;//chỉ xử lý hành động kick chuột
 import java.awt.event.MouseEvent;//trích xuất đc tọa độ x,y
 import java.io.File;//dẫn đến các file đc lưu trong mt
-import java.util.List; 
+import java.util.List;
 
 public class BoardPanel extends JPanel{ //kế thừa JPanel để làm khung vẽ đồ họa
     private Board board;//quản lý mảng kẹo
@@ -13,7 +13,7 @@ public class BoardPanel extends JPanel{ //kế thừa JPanel để làm khung v�
     private GameManager gm=new GameManager(20,700); //quản lý điểm, times:20; score:700
 
     //xử lý hằng số chết
-    private final int CELL_SIZE= 75;//kich thuoc o vuong 
+    private final int CELL_SIZE= 75;//kich thuoc o vuong
     private final int BOARD_OFFSET_X=14;//lề trái
     private final int BOARD_OFFSET_Y=165;//lề trên
     private final int WINDOW_WIDTH=612;// chiều rộng cửa sổ
@@ -82,11 +82,11 @@ public class BoardPanel extends JPanel{ //kế thừa JPanel để làm khung v�
                     if (grid[i][j].isMoving())moving=true;
             }
         }
-        if (!moving){//giúp cho 3 viên mà gần nhau random thì tự nổ và tính điểm...
+        if (!moving) {//giúp cho 3 viên mà gần nhau random thì tự nổ và tính điểm...
             List<Candy> newMatches=finder.findMatches(board.getGrid());//dùng list thay vì aray giúp hệ thống linh hoạt chứa lượng kẹo nổ bất kì mà ko bị giới hạn kích thước cứng
             if (!newMatches.isEmpty()) processMatches();
         }
-    }    
+    }
     //ngăn ng chơi lướt kẹo khi bảng kẹo chưa ổn định
     private boolean isBoardMoving(){
         for (Candy[] row: board.getGrid()){

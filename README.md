@@ -30,26 +30,28 @@ java -cp out candycrush.Main
 - **Click** viên kẹo kề cạnh để hoán đổi
 - Tạo **3 viên kẹo trùng màu** liên tiếp (ngang hoặc dọc) để ghi điểm
 - 4+ viên trùng: **Bonus điểm**
-- Đạt **Target Score** trước khi hết **Moves** để lên Level
+- Đạt **Target Score** trước khi hết **Times** để lên Level
 - Nhấn **↺ New Game** để chơi lại
 
 ## Tính năng
 - ✅ 6 loại kẹo với màu sắc và emoji riêng
 - ✅ Match 3 (ngang + dọc)
-- ✅ Cascade (combo tự động)
 - ✅ Animation hiệu ứng khi match (flash + particles)
 - ✅ Pop animation cho viên kẹo trúng
-- ✅ Hover effect
-- ✅ HUD: Score, Level, Moves, Progress bar
+- ✅ Hiệu ứng trượt kẹo
+- ✅ HUD: Score, Level, Moves
 - ✅ Level up system
-- ✅ Game Over / Win dialog
+- ✅ Try agian 
 
 ## Cấu trúc code (Design Patterns)
-- **MVC**: Model (GameBoard, Candy), View (GamePanel, HudPanel), Controller (GameFrame)
-- **Observer**: GameBoard.GameListener interface
-- **Enum**: CandyType với properties
-- **Factory**: CandyType.random()
-
+- **MVC**:
+   •M(Model)-dữ liệu và luật chơi: GameEngine, Board, MAtchFinder, Candy, Value object(Position,Move, LevelConfig)
+   •V(View)-hiển thị UI và nhận lệnh render từ Controller: GameWindow, BoardPanel, HUBPanel
+   •C(Controller)-xử lý thao tác người chơi: GameController
+- **Entry**: •Main: khởi chạy game 
+- **Observer**: GameView, HUDPanel, GameWindow, BoardPanel
+- **Enum**: CandyColor
+  
 ## Điểm thưởng (cho project)
 - 🎯 Extra features: Cascade, Particles, Animations, HUD, Level system (+2pts mỗi cái)
 - 🏗️ Design Patterns: Observer, MVC, Enum, Factory (+5pts mỗi cái)
