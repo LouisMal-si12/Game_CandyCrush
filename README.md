@@ -44,10 +44,10 @@ java -cp out candycrush.Main
 - ✅ Try agian 
 
 ## Cấu trúc code (Design Patterns)
-- **MVC**: Model (Board, Candy, Move, Position, LevelConfig), View (BoardPanel, HUDPanel, GameWindow,GameView), Controller (GameEngine, MatchFinder, GameController)
+- **MVC**: Model (Board, Candy, Move, Position, LevelConfig); View (BoardPanel, HUDPanel,                   GameWindow,GameView); Controller (GameEngine, MatchFinder, GameController)
 - **Observer**: GameView, HUDPanel, GameWindow, BoardPanel
 - **Enum**: CandyColor
-
+  
 ## Điểm thưởng (cho project)
 - 🎯 Extra features: Cascade, Particles, Animations, HUD, Level system (+2pts mỗi cái)
 - 🏗️ Design Patterns: Observer, MVC, Enum, Factory (+5pts mỗi cái)
