@@ -1,10 +1,5 @@
-// File: Main.java
 import javax.swing.SwingUtilities;
 
-/**
- * Class Main - Application Entry Point.
- * (Điểm khởi động - Nơi lắp ráp MVC và chạy game.)
- */
 public class Main {
     public static void main(String[] args) {
         // Run on Event Dispatch Thread for smooth UI

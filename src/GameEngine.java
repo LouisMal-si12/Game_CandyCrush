@@ -1,38 +1,5 @@
 import java.util.List;
-import java.util.list;
 
-    public class GameEngine {
-        private Board board;
-        private MatchFinder matchFinder;
-        private LevelConfig[] levels;
-        private int currentLevelIndex;
-        private int score;
-        private int remainingMoves;
-        private List<List<Position>> lastMatches;
-    
-        public GameEngine() {
-            this.board = new Board();
-            this.matchFinder = new MatchFinder();
-            this.levels = new LevelConfig[]{
-                new LevelConfig(1, 100, 20),
-                new LevelConfig(2, 300, 18),
-                new LevelConfig(3, 600, 15)
-            };
-            this.currentLevelIndex = 0;
-        }
-    
-        public void startGame() {
-            currentLevelIndex = 0;
-            score = 0;
-            startLevel(currentLevelIndex);
-        }
-    
-        public void startLevel(int levelIndex) {
-            this.currentLevelIndex = levelIndex;
-            this.remainingMoves    = levels[levelIndex].getMaxMoves();
-            fillRandomCandies();
-        }
-    }
 public class GameEngine {
     private Board board;
     private MatchFinder matchFinder;
@@ -85,7 +52,7 @@ public class GameEngine {
             return false;
         }
 
-        // 3. Move is valid, deduct a turn and process explosions 
+        // 3. Move is valid, deduct a turn and process explosions
         // (Hợp lệ: Trừ đi 1 lượt và tiến hành nổ kẹo)
         remainingMoves--;
         resolveMatches();

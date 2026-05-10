@@ -25,9 +25,8 @@ public class MatchFinder {
                 Candy candy2 = board.getCandy(new Position(r, c + 1));
                 Candy candy3 = board.getCandy(new Position(r, c + 2));
 
-              
                 if (candy2 != null && candy3 != null &&
-                    candy1.getColor() == candy2.getColor() && 
+                    candy1.getColor() == candy2.getColor() &&
                     candy1.getColor() == candy3.getColor()) {
                     
                     List<Position> match = new ArrayList<>();

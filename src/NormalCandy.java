@@ -1,4 +1,3 @@
-// File: NormalCandy.java
 /**
  * Class NormalCandy - Standard candy implementation.
  * (Kẹo bình thường - Có thể mở rộng kẹo sọc, kẹo bọc sau này.)

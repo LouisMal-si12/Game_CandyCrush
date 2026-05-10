@@ -1,4 +1,3 @@
-// File: Board.java
 import java.util.Random;
 
 /**
@@ -24,11 +23,11 @@ public class Board {
     }
 
     // --- BASIC UTILITIES (Các hàm tiện ích cơ bản) ---
-    public int getRows() { 
+    public int getRows() {
         return rows;
     }
-    public int getCols() { 
-        return cols; 
+    public int getCols() {
+        return cols;
     }
 
     /**
