@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;//trích xuất đc tọa độ x,y
 import java.io.File;//dẫn đến các file đc lưu trong mt
 import java.util.List; 
 
-public class GamePanel extends JPanel{ //kế thừa JPanel để làm khung vẽ đồ họa
+public class BoardPanel extends JPanel{ //kế thừa JPanel để làm khung vẽ đồ họa
     private Board board;//quản lý mảng kẹo
     private MatchFinder finder=new MatchFinder();// thuật toán quét nổ kẹo
     private GameManager gm=new GameManager(20,700); //quản lý điểm, times:20; score:700
@@ -24,7 +24,7 @@ public class GamePanel extends JPanel{ //kế thừa JPanel để làm khung v�
     private Image bgImage;//khung rỗng
     private Timer gameLoop;//đồng hồ khai báo đếm nhịp_animation
 
-    public GamePanel(Board board){
+    public BoardPanel(Board board){
         this.board=board;//khi file main tạo ra gamepanel->giúp gamepanel phân biệt các items candy
         this.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));// set cái kích thước của khung game
 

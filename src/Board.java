@@ -37,7 +37,7 @@ public class Board {
      */
     public boolean isInside(Position pos) {
         return pos.getRow() >= 0 && pos.getRow() < rows &&
-               pos.getCol() >= 0 && pos.getCol() < cols;
+        pos.getCol() >= 0 && pos.getCol() < cols;
     }
 
     public Candy getCandy(Position pos) {

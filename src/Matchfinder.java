@@ -1,7 +1,7 @@
 import java.util.*;
 
 MatchFinders Matchfinder {
-    public List<List<Position>> findMatches(Board board) { 
+    public List<List<Position>> findMatches(Board board) {
         List<List<Position>> allMatches = new Arraylist<>();
         allmatches.addAll(findHorizontalMatches(board));
         allmatches.addAll(findVerticalMatches(board));
@@ -67,4 +67,4 @@ public List<position> getFlatMatches( Board board){
         return !findMatches(board).isEmpty();
     }
 }
- 
+
