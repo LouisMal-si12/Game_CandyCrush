@@ -30,16 +30,15 @@ java -cp out candycrush.Main
 - **Click** viên kẹo kề cạnh để hoán đổi
 - Tạo **3 viên kẹo trùng màu** liên tiếp (ngang hoặc dọc) để ghi điểm
 - 4+ viên trùng: **Bonus điểm**
-- Đạt **Target Score** trước khi hết **Moves** để lên Level
+- Đạt **Target Score** trước khi hết **Times** để lên Level
 - Nhấn **↺ New Game** để chơi lại
 
 ## Tính năng
 - ✅ 6 loại kẹo với màu sắc và emoji riêng
 - ✅ Match 3 (ngang + dọc)
-- ✅ Cascade (combo tự động)
 - ✅ Animation hiệu ứng khi match (flash + particles)
 - ✅ Pop animation cho viên kẹo trúng
-- ✅ Hover effect
+- ✅ Hiệu ứng trượt kẹo
 - ✅ HUD: Score, Level, Moves
 - ✅ Level up system
 - ✅ Try agian 
