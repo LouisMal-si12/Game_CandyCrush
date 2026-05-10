@@ -44,7 +44,11 @@ java -cp out candycrush.Main
 - ✅ Try agian 
 
 ## Cấu trúc code (Design Patterns)
-- **MVC**: Model (Board, Candy, Move, Position, LevelConfig); View (BoardPanel, HUDPanel,                   GameWindow,GameView); Controller (GameEngine, MatchFinder, GameController)
+- **MVC**:
+   •M(Model)-dữ liệu và luật chơi: GameEngine, Board, MAtchFinder, Candy, Value object(Position,Move, LevelConfig)
+   •V(View)-hiển thị UI và nhận lệnh render từ Controller: GameWindow, BoardPanel, HUBPanel
+   •C(Controller)-xử lý thao tác người chơi: GameController
+- **Entry**: •Main: khởi chạy game 
 - **Observer**: GameView, HUDPanel, GameWindow, BoardPanel
 - **Enum**: CandyColor
   
