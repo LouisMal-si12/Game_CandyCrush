@@ -40,15 +40,14 @@ java -cp out candycrush.Main
 - ✅ Animation hiệu ứng khi match (flash + particles)
 - ✅ Pop animation cho viên kẹo trúng
 - ✅ Hover effect
-- ✅ HUD: Score, Level, Moves, Progress bar
+- ✅ HUD: Score, Level, Moves
 - ✅ Level up system
-- ✅ Game Over / Win dialog
+- ✅ Try agian 
 
 ## Cấu trúc code (Design Patterns)
-- **MVC**: Model (GameBoard, Candy), View (GamePanel, HudPanel), Controller (GameFrame)
-- **Observer**: GameBoard.GameListener interface
-- **Enum**: CandyType với properties
-- **Factory**: CandyType.random()
+- **MVC**: Model (Board, Candy, Move, Position, LevelConfig), View (BoardPanel, HUDPanel, GameWindow,GameView), Controller (GameEngine, MatchFinder, GameController)
+- **Observer**: GameView, HUDPanel, GameWindow, BoardPanel
+- **Enum**: CandyColor
 
 ## Điểm thưởng (cho project)
 - 🎯 Extra features: Cascade, Particles, Animations, HUD, Level system (+2pts mỗi cái)
