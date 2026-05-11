@@ -101,3 +101,4 @@ public abstract class Candy {
         this.x = targetX;
         this.y = targetY - 400; 
 }
+}
