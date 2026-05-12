@@ -9,9 +9,18 @@ public class HUDPanel extends JPanel {
         this.setOpaque(false); 
     }
 
-    public void updateScore(int score) { this.currentScore = score; repaint(); }
-    public void updateMoves(int moves) { this.remainingMoves = moves; repaint(); }
-    public void updateLevel(LevelConfig level) { this.currentLevel = level; repaint(); }
+    public void updateScore(int score) { 
+        this.currentScore = score; 
+        repaint();
+    }
+    public void updateMoves(int moves) { 
+        this.remainingMoves = moves; 
+        repaint(); 
+    }
+    public void updateLevel(LevelConfig level) { 
+        this.currentLevel = level; 
+        repaint(); 
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
