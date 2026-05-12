@@ -85,9 +85,19 @@ public class GameEngine {
         return remainingMoves <= 0 && !isLevelCompleted();
     }
 
-    public Board getBoard() { return board; }
-    public int getScore() { return score; }
-    public int getRemainingMoves() { return remainingMoves; }
-    public LevelConfig getCurrentLevel() { return levels[currentLevelIndex]; }
-    public List<List<Position>> getLastMatches() { return lastMatches; }
+    public Board getBoard() { 
+        return board; 
+    }
+    public int getScore() {
+        return score;
+    }
+    public int getRemainingMoves() { 
+        return remainingMoves; 
+    }
+    public LevelConfig getCurrentLevel() {
+        return levels[currentLevelIndex]; 
+    }
+    public List<List<Position>> getLastMatches() { 
+        return lastMatches; 
+    }
 }

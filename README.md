@@ -45,10 +45,10 @@ java -cp out candycrush.Main
 
 ## Cấu trúc code (Design Patterns)
 - **MVC**:
-   •M(Model)-dữ liệu và luật chơi: GameEngine, Board, MAtchFinder, Candy, Value object(Position,Move, LevelConfig)
+   •M(Model)-dữ liệu và luật chơi: GameEngine, Board, MatchFinder, Candy, Value objects(Position, Move, LevelConfig)
    •V(View)-hiển thị UI và nhận lệnh render từ Controller: GameWindow, BoardPanel, HUBPanel
    •C(Controller)-xử lý thao tác người chơi: GameController
-- **Entry**: •Main: khởi chạy game 
+- **Entry**: •Main: khởi chạy game
 - **Observer**: GameView, HUDPanel, GameWindow, BoardPanel
 - **Enum**: CandyColor
   
