@@ -53,10 +53,10 @@ public abstract class Candy {
     public void update() {
         if (x != targetX || y != targetY) {
             isMoving = true;
-            int speedX = (targetX - x) / 4; 
+            int speedX = (targetX - x) / 4;
             int speedY = (targetY - y) / 4;
 
-           
+        
             if (Math.abs(targetX - x) < 4) x = targetX; else x += speedX;
             if (Math.abs(targetY - y) < 4) y = targetY; else y += speedY;
         } else {
